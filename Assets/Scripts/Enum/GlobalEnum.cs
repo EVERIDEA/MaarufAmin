@@ -4,5 +4,7 @@ using UnityEngine;
 
 public enum EMainMenuButton
 {
-    PLAY, HELP, EXIT
+    PLAY, HELP, EXIT, RESTART,
+    PAUSE,
+    START_GAME
 }

@@ -5,7 +5,7 @@ public class GameEvent { }
 
 public class EventManager
 {
-    public delegate void DelegateEvent<T>(T evt);
+    public delegate void DelegateEvent<T>(T e);
     private static Dictionary<Type, Delegate> delegates = new Dictionary<Type, Delegate>();
     
     public static void AddListener<T>(DelegateEvent<T> del) where T : GameEvent

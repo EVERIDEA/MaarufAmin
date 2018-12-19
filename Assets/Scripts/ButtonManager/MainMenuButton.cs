@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuButton : ButtonManager {
+public class MainMenuButton : MonoBehaviour, IButtonInit {
     
     [SerializeField]
     GameObject _PlayButton;
@@ -13,7 +13,12 @@ public class MainMenuButton : ButtonManager {
     GameObject _ExitButton;
 
     // Use this for initialization
-    protected override void InitOnAwake()
+    void Awake()
+    {
+        InitOnAwake();
+    }
+
+    public void InitOnAwake()
     {
         _PlayButton.AddComponent<Button>().onClick.AddListener(delegate {
             OnCallPlayButton();
@@ -33,12 +38,12 @@ public class MainMenuButton : ButtonManager {
     }
     void OnCallHelpButton()
     {
+        EventManager.TriggerEvent(new MainMenuButtonEvent(EMainMenuButton.HELP, true));
         //write function button here
-        Debug.Log("HELP BUTTON");
     }
     void OnCallExitButton()
     {
+        EventManager.TriggerEvent(new MainMenuButtonEvent(EMainMenuButton.EXIT));
         //write function button here
-        Debug.Log("EXIT BUTTON");
     }
 }
