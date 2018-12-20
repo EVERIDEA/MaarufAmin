@@ -314,7 +314,17 @@
     <Compile Include="Assets\Scripts\ButtonManager\StoryMenuButton.cs" />
     <Compile Include="Assets\Scripts\DisplayManager.cs" />
     <Compile Include="Assets\Scripts\Enum\GlobalEnum.cs" />
+    <Compile Include="Assets\Scripts\Events\EncounterBehaviourEvent.cs" />
     <Compile Include="Assets\Scripts\Events\MainMenuEvents.cs" />
+    <Compile Include="Assets\Scripts\Events\PlayerBehaviourEvent.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\ControllerManager.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\Encounter\BegalBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\Encounter\PeopleBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\Encounter\PersBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\EncounterBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\GameplayManager.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\PlayerBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Reuseable\Backeend.cs" />
     <Compile Include="Assets\Scripts\Reuseable\EventManager.cs" />
     <Compile Include="Assets\Scripts\Reuseable\Events.cs" />

@@ -12,9 +12,13 @@ public class DisplayObjectClass
 public class DisplayManager : MonoBehaviour
 {
     [SerializeField]
+    bool _IsTest;
+
+    [SerializeField]
     DisplayObjectClass[] _DisplayList;
 
     Dictionary<string, GameObject> _ListOfDisplay = new Dictionary<string, GameObject>();
+
     
     // Use this for initialization
     void Awake ()
@@ -29,7 +33,8 @@ public class DisplayManager : MonoBehaviour
 
     private void Start()
     {
-        MainMenuButtonListener(new MainMenuButtonEvent(EMainMenuButton.RESTART));
+        if (!_IsTest)
+            MainMenuButtonListener(new MainMenuButtonEvent(EMainMenuButton.RESTART));
     }
 
     void MainMenuButtonListener(MainMenuButtonEvent e)

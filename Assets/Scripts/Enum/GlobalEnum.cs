@@ -8,3 +8,13 @@ public enum EMainMenuButton
     PAUSE,
     START_GAME
 }
+
+public enum EEncounterType
+{
+    PEOPLE, PERS, BEGAL
+}
+
+public enum EEncounterBehaviourType
+{
+    WALKING, IDLE, RUN, DEAD, TAKE_PICTURE, ATTACK
+}
