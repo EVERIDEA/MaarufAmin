@@ -5,11 +5,5 @@ using UnityEngine.UI;
 
 public abstract class ButtonManager : MonoBehaviour
 {
-    private void Awake()
-    {
-        InitOnAwake();
-    }
-
-    virtual protected void InitOnAwake() { }
 
 }

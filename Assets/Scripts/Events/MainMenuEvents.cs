@@ -5,9 +5,11 @@ using UnityEngine;
 public class MainMenuButtonEvent : GameEvent
 {
     public EMainMenuButton Type;
+    public bool IsActive;
 
-    public MainMenuButtonEvent(EMainMenuButton type)
+    public MainMenuButtonEvent(EMainMenuButton type, bool isActive = true)
     {
         Type = type;
+        IsActive = isActive;        
     }
 }
