@@ -26,7 +26,7 @@ public class ControllerManager : MonoBehaviour {
 
             if(hit.collider != null)
             {
-                Debug.Log("Something was clicked! = "+hit.transform.tag);
+                //Debug.Log("Something was clicked! = "+hit.transform.tag);
                 //hit.collider.attachedRigidbody.AddForce(Vector2.up);
             }
         }

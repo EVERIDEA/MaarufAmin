@@ -6,9 +6,9 @@ public abstract class EncounterBehaviour : MonoBehaviour {
     public EEncounterType Type;
     // Use this for initialization
 
-    public void InitEncounterBehaviour()
+    public void InitEncounterBehaviour(EEncounterBehaviourType TYPE)
     {
-
+        OnBehaviourListener(TYPE);
     }
 
     void OnBehaviourListener(EEncounterBehaviourType type)
@@ -22,8 +22,10 @@ public abstract class EncounterBehaviour : MonoBehaviour {
                 OnIdle();
                 break;
             case EEncounterBehaviourType.RUN:
+                OnRun();
                 break;
             case EEncounterBehaviourType.DEAD:
+                OnDead();
                 break;
             case EEncounterBehaviourType.TAKE_PICTURE:
                 if (Type != EEncounterType.PERS)

@@ -6,7 +6,7 @@ public class BegalBehaviour : EncounterBehaviour
 {
     protected override void OnDead()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("DEAD");
     }
 
     protected override void OnIdle()
@@ -22,5 +22,13 @@ public class BegalBehaviour : EncounterBehaviour
     protected override void OnWalking()
     {
         throw new System.NotImplementedException();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag.Equals("Player"))
+        {
+            InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+        }
     }
 }
