@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaarufAmin", "MaarufAmin.csproj", "{C428CE83-0549-4980-D8F6-49AEC4D22F1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaarufAmin.Plugins", "MaarufAmin.Plugins.csproj", "{AC7695B3-EBB2-82E5-8228-714FD9982F8F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C428CE83-0549-4980-D8F6-49AEC4D22F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C428CE83-0549-4980-D8F6-49AEC4D22F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C428CE83-0549-4980-D8F6-49AEC4D22F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C428CE83-0549-4980-D8F6-49AEC4D22F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC7695B3-EBB2-82E5-8228-714FD9982F8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC7695B3-EBB2-82E5-8228-714FD9982F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC7695B3-EBB2-82E5-8228-714FD9982F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC7695B3-EBB2-82E5-8228-714FD9982F8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
