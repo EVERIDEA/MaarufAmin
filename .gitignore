@@ -4,3 +4,4 @@ Library/
 Temp/
 Assets/BigAssets/
 .vs/
+Packages/manifest.json
