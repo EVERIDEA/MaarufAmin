@@ -6,9 +6,12 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour {
 
+    public static PlayerBehaviour thisClass;
+
     [HideInInspector]
     Transform _PlayerTransform;
     public float Speed = 2;
+    public bool isOnCathingPeople = false;
 
     Tween _Tween;
     float _DefaultSpeed;
@@ -16,7 +19,8 @@ public class PlayerBehaviour : MonoBehaviour {
     // Use this for initializatio
     private void Awake()
     {
-        _PlayerTransform = this.transform;
+        thisClass = this;
+        _PlayerTransform = thisClass.transform;
         _DefaultSpeed = Speed;
 
         EventManager.AddListener<PlayerBehaviourMoveEvent>(MovePlayerListener);

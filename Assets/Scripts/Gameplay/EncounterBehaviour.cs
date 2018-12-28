@@ -19,7 +19,7 @@ public abstract class EncounterBehaviour : MonoBehaviour {
                 OnWalking();
                 break;
             case EEncounterBehaviourType.IDLE:
-                OnIdle();
+                StartCoroutine(TimeBeforeDead(1));
                 break;
             case EEncounterBehaviourType.RUN:
                 OnRun();
@@ -45,8 +45,19 @@ public abstract class EncounterBehaviour : MonoBehaviour {
 
     virtual protected void OnAttack()
     {
+
     }
     virtual protected void OnTakePicture()
     {
+
+    }
+
+    IEnumerator TimeBeforeDead(float time)
+    {
+        OnIdle();
+        PlayerBehaviour.thisClass.isOnCathingPeople = true;
+        yield return new WaitForSeconds(time);
+        OnDead();
+        PlayerBehaviour.thisClass.isOnCathingPeople = false;
     }
 }
