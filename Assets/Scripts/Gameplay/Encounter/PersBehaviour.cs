@@ -9,6 +9,7 @@ public class PersBehaviour : EncounterBehaviour
     public Vector3 _Rotation;
     public Vector3 _Jump;
     public float _MovementSpeed;
+    public float _MovementMaxSped;
     public float _RotationSpeed;
     public float _JumpPower;
     public float _JumpDuration;
@@ -38,7 +39,9 @@ public class PersBehaviour : EncounterBehaviour
 
     protected override void OnRun()
     {
-        throw new System.NotImplementedException();
+        if (_Tween != null)
+            _Tween.Kill();
+        _Tween = this.transform.DOMove(new Vector2(_Direction + _MovementMaxSped, transform.position.y), _MovementSpeed, false);
     }
 
     protected override void OnWalking()
@@ -52,12 +55,17 @@ public class PersBehaviour : EncounterBehaviour
     {
         if (collision.tag.Equals("Player"))
         {
-            if (!PlayerBehaviour.thisClass.isOnCathingPeople) {
-                if (isHoax)
-                    InitEncounterBehaviour(EEncounterBehaviourType.IDLE);
-            }
-            else {
-                Debug.Log("KI ARUF IS BUSSY");
+            if (!PlayerBehaviour.thisClass.isOnGrass)
+            {
+                if (!PlayerBehaviour.thisClass.isOnCathingPeople)
+                {
+                    if (isHoax)
+                        InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+                }
+                else
+                {
+                    Debug.Log("KI ARUF IS BUSSY");
+                }
             }
         }
     }
