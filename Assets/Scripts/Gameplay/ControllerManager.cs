@@ -5,30 +5,49 @@ using DG.Tweening;
 
 public class ControllerManager : MonoBehaviour {
     
-    Tween _Tween;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if(Input.GetMouseButtonDown(0))
+    public GameObject player;
+
+    Transform playerTransform;
+    PlayerBehaviour playerBehaviour;
+
+    float checkDirection = 0;
+    int direction = 0;
+
+    private void Start()
+    {
+        playerTransform = player.GetComponent<Transform>();
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if (!PlayerBehaviour.thisClass.isOnCathingPeople)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-            Debug.Log(mousePos);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-
-
-            mousePos2D = SetMinMaxPlayerPosition(mousePos2D);
-            EventManager.TriggerEvent(new PlayerBehaviourMoveEvent(mousePos2D));
-
-            if(hit.collider != null)
+            if (Input.GetMouseButtonDown(0))
             {
-                //Debug.Log("Something was clicked! = "+hit.transform.tag);
-                //hit.collider.attachedRigidbody.AddForce(Vector2.up);
+                PlayerBehaviour.thisClass.isOnGrass = false;
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+
+                Debug.Log(mousePos2D);
+
+                var lastPos = playerTransform.position;
+                checkDirection = (mousePos - lastPos).normalized.x;
+                if (checkDirection < 0.01)
+                    direction = -1;
+                else if (checkDirection > 0.01)
+                    direction = 1;
+
+                playerTransform.localScale = new Vector2(direction, playerTransform.localScale.y);
+
+                RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+                mousePos2D = SetMinMaxPlayerPosition(mousePos2D);
+
+                EventManager.TriggerEvent(new PlayerBehaviourMoveEvent(mousePos2D));
             }
+        }
+        else
+        {
+            Debug.Log("KI ARUF AMIN IS BUSSY");
         }
     }
 

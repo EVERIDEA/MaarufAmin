@@ -19,13 +19,13 @@ public abstract class EncounterBehaviour : MonoBehaviour {
                 OnWalking();
                 break;
             case EEncounterBehaviourType.IDLE:
-                StartCoroutine(TimeBeforeDead(1));
+                OnIdle();
                 break;
             case EEncounterBehaviourType.RUN:
                 OnRun();
                 break;
             case EEncounterBehaviourType.DEAD:
-                OnDead();
+                StartCoroutine(TimeBeforeDead(1));
                 break;
             case EEncounterBehaviourType.TAKE_PICTURE:
                 if (Type != EEncounterType.PERS)
@@ -59,5 +59,16 @@ public abstract class EncounterBehaviour : MonoBehaviour {
         yield return new WaitForSeconds(time);
         OnDead();
         PlayerBehaviour.thisClass.isOnCathingPeople = false;
+        yield return new WaitForSeconds(3);
+        Destroy(gameObject);
+    }
+
+    virtual protected bool CheckDirection(int direction)
+    {
+        direction = direction * -1;
+        if (direction < 0)
+            return false;
+        else
+            return true;
     }
 }

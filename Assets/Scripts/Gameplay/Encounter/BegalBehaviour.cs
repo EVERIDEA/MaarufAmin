@@ -44,15 +44,22 @@ public class BegalBehaviour : EncounterBehaviour
     {
         if (_Tween != null)
             _Tween.Kill();
-        _Tween = this.transform.DOMove(new Vector2(_Direction, transform.position.y), _MovementSpeed,false);
+
+        if (!CheckDirection(_Direction))
+            this.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
+        else
+            this.transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
+
+        _Tween = this.transform.DOMove(new Vector2(_Direction, transform.position.y), _MovementSpeed, false);
+        Debug.Log(CheckDirection(_Direction));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag.Equals("Player"))
         {
-            InitEncounterBehaviour(EEncounterBehaviourType.IDLE);
-            
+            if (!PlayerBehaviour.thisClass.isOnGrass)
+                InitEncounterBehaviour(EEncounterBehaviourType.DEAD); 
         }
     }
 }
