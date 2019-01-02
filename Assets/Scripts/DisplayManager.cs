@@ -71,6 +71,7 @@ public class DisplayManager : MonoBehaviour
                 _ListOfDisplay["StoryMenu"].SetActive(false);
                 if(e.IsActive)
                 {
+                    GameplayManager.thisClass.isGameReady = true;
                     _ListOfDisplay["Gameplay"].SetActive(true);
                 }
                 else

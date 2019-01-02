@@ -14,6 +14,10 @@ public class BegalBehaviour : EncounterBehaviour
     public float _JumpDuration;
     public int _Direction;
 
+    Vector2 playerPos;
+    float distance;
+    bool isOnCatch = false;
+
     private void Start()
     {
         InitEncounterBehaviour(EEncounterBehaviourType.WALKING);
@@ -32,7 +36,7 @@ public class BegalBehaviour : EncounterBehaviour
 
     protected override void OnIdle()
     {
-        _Tween.Pause<Tween>();
+        _Tween.Kill();
     }
 
     protected override void OnRun()
@@ -59,7 +63,29 @@ public class BegalBehaviour : EncounterBehaviour
         if (collision.tag.Equals("Player"))
         {
             if (!PlayerBehaviour.thisClass.isOnGrass)
-                InitEncounterBehaviour(EEncounterBehaviourType.DEAD); 
+            {
+                isOnCatch = true;
+                InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (isOnCatch)
+        {
+            if (PlayerBehaviour.thisClass.direction == -1)
+            {
+                transform.position = new Vector2(
+                    PlayerBehaviour.thisClass.transform.position.x - 2f,
+                    PlayerBehaviour.thisClass.transform.position.y);
+            }
+            else
+            {
+                transform.position = new Vector2(
+                     PlayerBehaviour.thisClass.transform.position.x + 2f,
+                     PlayerBehaviour.thisClass.transform.position.y);
+            }
         }
     }
 }
