@@ -54,21 +54,11 @@ public abstract class EncounterBehaviour : MonoBehaviour {
 
     IEnumerator TimeBeforeDead(float time)
     {
-        OnIdle();
         PlayerBehaviour.thisClass.isOnCathingPeople = true;
         yield return new WaitForSeconds(time);
         OnDead();
         PlayerBehaviour.thisClass.isOnCathingPeople = false;
         yield return new WaitForSeconds(3);
         Destroy(gameObject);
-    }
-
-    virtual protected bool CheckDirection(int direction)
-    {
-        direction = direction * -1;
-        if (direction < 0)
-            return false;
-        else
-            return true;
     }
 }

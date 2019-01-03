@@ -13,9 +13,10 @@ public class PlayerBehaviour : MonoBehaviour {
     public float Speed = 2;
     public bool isOnCathingPeople = false;
     public bool isOnGrass = true;
+    public bool isStayOnGrass = true;
     public bool isFacingRight = true;
     public SpriteRenderer spriteRenderer;
-    public int direction = 1; 
+    public int direction = 0; 
 
     Tween _Tween;
     float _DefaultSpeed;

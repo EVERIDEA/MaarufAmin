@@ -64,9 +64,12 @@ public class ControllerManager : MonoBehaviour {
         {
             if (playerTransform.position.x == mousePos2D.x)
             {
-                PlayerBehaviour.thisClass.isOnGrass = true;
-                isOnPlaying = false;
-                GrassTriggerManager.thisClass.isClickOnGrass = false;
+                if (GrassTriggerManager.thisClass.isReadyToGrass)
+                {
+                    PlayerBehaviour.thisClass.isOnGrass = true;
+                    isOnPlaying = false;
+                    GrassTriggerManager.thisClass.isClickOnGrass = false;
+                }
             }
         }
     }
