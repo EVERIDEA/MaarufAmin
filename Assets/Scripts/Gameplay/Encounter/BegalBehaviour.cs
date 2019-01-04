@@ -9,24 +9,29 @@ public class BegalBehaviour : EncounterBehaviour
     public Vector3 _Jump;
     public float _MovementSpeed;
     public float _PanicMovementSpeed;
-    public float _RotationSpeed;
-    public float _JumpPower;
-    public float _JumpDuration;
+    public int _PanicMaxTime;
     public int _Direction;
 
     Vector2 playerPos;
     float distance;
     bool isOnCatch = false;
+    float _RotationSpeed = 3f;
+    float _JumpPower = 8;
+    float _JumpDuration = 2;
 
     [SerializeField]
     float curMoveSpeed;
 
     int checkMethodRun = 0;
     int indexBehaviour = 0;
+    float tempPanicMovement;
 
+    int panicTime = 0;
     //state initialize
     private void Start()
     {
+        _MovementSpeed = _Direction;
+        tempPanicMovement = _PanicMovementSpeed;
         curMoveSpeed = _MovementSpeed;
         InitEncounterBehaviour(EEncounterBehaviourType.WALKING);
     }
@@ -48,26 +53,35 @@ public class BegalBehaviour : EncounterBehaviour
     //procedure when encounter were running
     protected override void OnRun()
     {
-        CheckFlip(_Direction);
+        switch (_Direction)
+        {
+            case -1:
+                _PanicMovementSpeed = _PanicMovementSpeed * 1;
+                break;
+            case 1:
+                _PanicMovementSpeed = _PanicMovementSpeed * -1;
+                break;
+        }
         curMoveSpeed = _PanicMovementSpeed;
+        panicTime += 1;
     }
 
     //procedure when encounter were walking
     protected override void OnWalking()
     {
-        CheckFlip(_Direction);
         curMoveSpeed = _MovementSpeed;
     }
 
     //procedure when encounter were facing to the direction
-    void CheckFlip(int dir)
+    void CheckFlip(float dir)
     {
         if (!isOnCatch)
         {
-            if (dir > 0)
-                transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
+            if (dir < 0)
+                _Direction = -1;
             else
-                transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
+                _Direction = 1;
+            transform.localScale = new Vector2(_Direction, transform.localScale.y);
         }
     }
 
@@ -76,6 +90,7 @@ public class BegalBehaviour : EncounterBehaviour
     {
         if (!isOnCatch)
         {
+            CheckFlip(curMoveSpeed);
             transform.transform.position = new Vector2(
                         transform.position.x + Time.deltaTime * curMoveSpeed,
                         transform.position.y);
@@ -98,15 +113,27 @@ public class BegalBehaviour : EncounterBehaviour
                 transform.position = new Vector2(
                      PlayerBehaviour.thisClass.transform.position.x + 2f,
                      PlayerBehaviour.thisClass.transform.position.y);
-                    
+
             }
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         WalkBehaviour();
         CatchHandler();
+
+        if (panicTime > (_PanicMaxTime - 1))
+        {
+            if(_Direction == 1)
+            {
+                _Direction = -1;
+            }
+            else
+            {
+                _Direction = 1;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -115,8 +142,21 @@ public class BegalBehaviour : EncounterBehaviour
         {
             if (!PlayerBehaviour.thisClass.isOnGrass)
             {
-                isOnCatch = true;
-                InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+                if (!PlayerBehaviour.thisClass.isOnCathingPeople)
+                {
+                    isOnCatch = true;
+                    InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+                }
+            }
+        }
+        if (!PlayerBehaviour.thisClass.isOnGrass)
+        {
+            if (collision.tag.Equals("PanicTrigger"))
+            {
+                if (panicTime < _PanicMaxTime)
+                {
+                    InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                }
             }
         }
     }
@@ -129,8 +169,10 @@ public class BegalBehaviour : EncounterBehaviour
             {
                 if(checkMethodRun == 0)
                 {
-                    _PanicMovementSpeed = _PanicMovementSpeed * -1;
-                    InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                    if (panicTime < _PanicMaxTime)
+                    {
+                        InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                    }
                     checkMethodRun = checkMethodRun + 1;
                 }
             }
@@ -144,7 +186,10 @@ public class BegalBehaviour : EncounterBehaviour
             if (collision.tag.Equals("PanicTrigger"))
             {
                 isOnCatch = false;
-                StartCoroutine(BackToNormal(2));
+                if (panicTime < _PanicMaxTime)
+                {
+                    StartCoroutine(BackToNormal(1));
+                }
             }
         }
     }
@@ -154,5 +199,7 @@ public class BegalBehaviour : EncounterBehaviour
     {
         yield return new WaitForSeconds(time);
         curMoveSpeed = _MovementSpeed;
+        _PanicMovementSpeed = tempPanicMovement;
+        checkMethodRun = 0;
     }
 }

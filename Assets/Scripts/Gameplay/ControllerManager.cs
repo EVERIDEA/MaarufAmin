@@ -55,7 +55,7 @@ public class ControllerManager : MonoBehaviour {
             }
             else
             {
-                   Debug.Log("KI ARUF AMIN IS BUSSY");
+                   //Player is Bussy
             }
             playerTransform.position = Vector2.MoveTowards(playerTransform.position, mousePos2D, PlayerBehaviour.thisClass.Speed * Time.deltaTime);
         }
