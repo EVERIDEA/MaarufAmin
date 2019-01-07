@@ -22,7 +22,8 @@ public class GrassTriggerManager : MonoBehaviour {
     {
         if (collision.gameObject.tag.Equals("Player"))
         {
-            isReadyToGrass = true;
+            if(!PlayerBehaviour.thisClass.isOnCathingPeople)
+                isReadyToGrass = true;
         }
     }
 
@@ -30,7 +31,8 @@ public class GrassTriggerManager : MonoBehaviour {
     {
         if (collision.gameObject.tag.Equals("Player"))
         {
-            isReadyToGrass = false;
+            if (!PlayerBehaviour.thisClass.isOnCathingPeople)
+                isReadyToGrass = false;
         }
     }
 }

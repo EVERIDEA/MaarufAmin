@@ -1,72 +1,117 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class PersBehaviour : EncounterBehaviour
 {
-    Tween _Tween;
-    public Vector3 _Rotation;
-    public Vector3 _Jump;
-    public float _MovementSpeed;
-    public float _MovementMaxSped;
-    public float _RotationSpeed;
-    public float _JumpPower;
-    public float _JumpDuration;
+    public float _Speed;
     public int _Direction;
-    public bool isHoax = false;
+    public int _CatchDistance;
+
+    float curMoveSpeed;
+
+    public bool isOnFollow = false;
+
+    Transform target;
+    Vector3 curScale;
 
     private void Start()
     {
+        InitPeopleBehaviour();
+    }
+
+    void InitPeopleBehaviour()
+    {
+        _Speed = _Speed * _Direction;
+        target = PlayerBehaviour.thisClass.transform;
+        curScale = GetComponent<Transform>().localScale;
         InitEncounterBehaviour(EEncounterBehaviourType.WALKING);
     }
 
     protected override void OnDead()
     {
-        Debug.Log("DEAD");
-        if (_Tween != null)
-            _Tween.Kill();
-
-        _Tween.Play<Tween>();
-        _Tween = this.transform.DORotate(_Rotation, _RotationSpeed, RotateMode.Fast);
-        _Tween = this.transform.DOJump(_Jump, _JumpPower, 1, _JumpDuration, false);
+        throw new System.NotImplementedException();
     }
 
     protected override void OnIdle()
     {
-        _Tween.Pause<Tween>();
+        throw new System.NotImplementedException();
     }
 
     protected override void OnRun()
     {
-        if (_Tween != null)
-            _Tween.Kill();
-        _Tween = this.transform.DOMove(new Vector2(_Direction + _MovementMaxSped, transform.position.y), _MovementSpeed, false);
+        throw new System.NotImplementedException();
     }
 
     protected override void OnWalking()
     {
-        if (_Tween != null)
-            _Tween.Kill();
-        _Tween = this.transform.DOMove(new Vector2(_Direction, transform.position.y), _MovementSpeed, false);
+        curMoveSpeed = _Speed;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void NewsHandler(Transform kiGuruTransform,float maxDistance)
     {
-        if (collision.tag.Equals("Player"))
-        {
+        float distance = Vector2.Distance(kiGuruTransform.position,transform.position);
+        if (distance >= 0 && distance < maxDistance)
+        { //In a Distance            
             if (!PlayerBehaviour.thisClass.isOnGrass)
             {
-                if (!PlayerBehaviour.thisClass.isOnCathingPeople)
-                {
-                    if (isHoax)
-                        InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
-                }
-                else
-                {
-                    Debug.Log("KI ARUF IS BUSSY");
-                }
+                // On Follow ki Guru
+                isOnFollow = true;
+            }
+            else
+            {
+                isOnFollow = false;
             }
         }
+        else
+        {
+            if (PlayerBehaviour.thisClass.isOnGrass)
+            {
+                isOnFollow = false;
+            }
+        }
+    }
+
+    Vector3 ChecLookPos()
+    {
+        Vector3 newPos;
+        if (PlayerBehaviour.thisClass.direction == 1)
+        {
+            return newPos = new Vector3(-6, 0,0);
+        }
+        else
+        {
+            return newPos = new Vector3(6, 0, 0);
+        }
+    }
+
+    void WalkingBehaviour()
+    {
+        curMoveSpeed = _Speed;
+        if (isOnFollow)
+        {
+            Vector3 onFollowPos = target.position + ChecLookPos();
+            Vector3 smoothPosition = Vector3.Lerp(transform.position, onFollowPos, 0.05f);
+            transform.position = smoothPosition;
+
+            if (transform.position.x < target.position.x)
+                transform.localScale = new Vector3(1,1,1);
+            else
+                transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = curScale;
+            transform.position = new Vector2(
+               transform.position.x + Time.deltaTime * curMoveSpeed,
+               transform.position.y);
+        }
+       
+    }
+
+    private void LateUpdate()
+    {
+        NewsHandler(target, _CatchDistance);
+        WalkingBehaviour();
     }
 }

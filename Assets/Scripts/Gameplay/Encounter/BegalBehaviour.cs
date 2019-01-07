@@ -27,6 +27,10 @@ public class BegalBehaviour : EncounterBehaviour
     float tempPanicMovement;
 
     int panicTime = 0;
+
+    [SerializeField]
+    bool isRob = false;
+
     //state initialize
     private void Start()
     {
@@ -47,7 +51,7 @@ public class BegalBehaviour : EncounterBehaviour
     //procedure when encounter were idle
     protected override void OnIdle()
     {
-        _Tween.Kill();
+        RobbingHandler();
     }
 
     //procedure when encounter were running
@@ -63,7 +67,8 @@ public class BegalBehaviour : EncounterBehaviour
                 break;
         }
         curMoveSpeed = _PanicMovementSpeed;
-        panicTime += 1;
+        if(isOnCatch)
+            panicTime += 1;
     }
 
     //procedure when encounter were walking
@@ -91,7 +96,7 @@ public class BegalBehaviour : EncounterBehaviour
         if (!isOnCatch)
         {
             CheckFlip(curMoveSpeed);
-            transform.transform.position = new Vector2(
+            transform.position = new Vector2(
                         transform.position.x + Time.deltaTime * curMoveSpeed,
                         transform.position.y);
         }
@@ -115,6 +120,19 @@ public class BegalBehaviour : EncounterBehaviour
                      PlayerBehaviour.thisClass.transform.position.y);
 
             }
+
+            if (isRob)
+            {
+                //Add Some More Reputations
+            }
+        }
+    }
+
+    void RobbingHandler()
+    {
+        if (isRob)
+        {
+            InitEncounterBehaviour(EEncounterBehaviourType.RUN);
         }
     }
 
@@ -158,6 +176,21 @@ public class BegalBehaviour : EncounterBehaviour
                     InitEncounterBehaviour(EEncounterBehaviourType.RUN);
                 }
             }
+        }
+
+        if (collision.tag.Equals("People"))
+        {
+            if (!collision.GetComponent<PeopleBehaviour>().isRobbed)
+            {
+                isRob = true;
+                collision.GetComponent<PeopleBehaviour>().isRobbed = true;
+            }
+            InitEncounterBehaviour(EEncounterBehaviourType.IDLE);
+        }
+
+        if (collision.tag.Equals("PeopleTrigger"))
+        {
+            curMoveSpeed = curMoveSpeed * 3;
         }
     }
 
