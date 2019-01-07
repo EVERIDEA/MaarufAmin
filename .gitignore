@@ -7,3 +7,6 @@ Assets/BigAssets/
 Packages/manifest.json
 Test.apk
 *.apk
+KiGuruAmin.csproj
+KiGuruAmin.Plugins.csproj
+KiGuruAmin.sln
