@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayManager : MonoBehaviour {
+public class GameplayManager : MonoBehaviour
+{
 
     public static GameplayManager thisClass;
     
-    [SerializeField]
     public bool isGameReady = false;
+    public bool isGameReset = false;
 
     [Header("Level Index")]
     public int _DayCount;
@@ -22,9 +23,16 @@ public class GameplayManager : MonoBehaviour {
     [Tooltip("Spawner manager is deferent, depend on game design by level.")]
     public List<SpawnerManager> spawnerManager;
 
+    [SerializeField]
     float curTime = 0;
+    [SerializeField]
+    float curPlus = 0;
+
+    [SerializeField]
     float time = 0;
 
+    [SerializeField]
+    bool breakingUp = false;
     // Use this for initialization
     private void Awake()
     {
@@ -38,16 +46,47 @@ public class GameplayManager : MonoBehaviour {
 
     public void InitEncounterSpawn()
     {
-        if(time != spawnerManager[_DayCount].maxTimeEncounterSpawn)
+        time = spawnerManager[_DayCount].timerByIndex;
+        StartCoroutine(SpawnEncounter(5));
+    }
+
+    void DestroyAllEncounters()
+    {
+        for (int i = 0; i <= (_SpawnerTransform.Length - 1); i++)
         {
-            StartCoroutine(SpawnEncounter(5));
+            if (_SpawnerTransform[i].transform.childCount > 0)
+            {
+                for (int j = 0; j <= (_SpawnerTransform[i].transform.childCount - 1); j++)
+                {
+                    Color color = _SpawnerTransform[i].transform.GetChild(j)
+                        .gameObject.GetComponent<SpriteRenderer>().color;
+                    color.a -= Time.deltaTime * 5f;
+                    _SpawnerTransform[i].transform.GetChild(j)
+                        .gameObject.GetComponent<SpriteRenderer>().color = color;
+                    if (_SpawnerTransform[i].transform.GetChild(j)
+                        .gameObject.GetComponent<SpriteRenderer>().color.a <= 0.001)
+                    {
+                        Destroy(_SpawnerTransform[i].transform.GetChild(j).gameObject);
+                        ResetGame();
+                    }
+                }
+            }
         }
     }
 
-    void SpawnEncounter(GameObject parent,GameObject encounter)
+    void ResetGame()
+    {
+        isGameReady = false;
+        curTime = 0;
+        curPlus = 0;
+        time = 0;
+        isGameReset = true;
+    }
+
+    void SpawnEncounter(GameObject parent, GameObject encounter)
     {
         float[] yPosition = { 1f, -1f, 2.5f };
-        GameObject newObject = Instantiate(encounter,parent.transform);
+        GameObject newObject = Instantiate(encounter, parent.transform);
         newObject.transform.SetParent(parent.transform);
         var name = newObject.GetComponent<EncounterBehaviour>().Type;
         if (parent.name.Equals("[RIGHT]"))
@@ -55,11 +94,16 @@ public class GameplayManager : MonoBehaviour {
             switch (name)
             {
                 case EEncounterType.BEGAL:
-                    newObject.GetComponent<BegalBehaviour>()._Direction = (int) -(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<BegalBehaviour>()._Direction =
+                        (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
                 case EEncounterType.PEOPLE:
+                    newObject.GetComponent<PeopleBehaviour>()._Direction =
+                        (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
                 case EEncounterType.PERS:
+                    newObject.GetComponent<PersBehaviour>()._Direction =
+                        (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
             }
         }
@@ -68,11 +112,16 @@ public class GameplayManager : MonoBehaviour {
             switch (name)
             {
                 case EEncounterType.BEGAL:
-                    newObject.GetComponent<BegalBehaviour>()._Direction = (int) (newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<BegalBehaviour>()._Direction =
+                        (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
                 case EEncounterType.PEOPLE:
+                    newObject.GetComponent<PeopleBehaviour>()._Direction =
+                        (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
                 case EEncounterType.PERS:
+                    newObject.GetComponent<PersBehaviour>()._Direction =
+                        (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
             }
         }
@@ -88,22 +137,19 @@ public class GameplayManager : MonoBehaviour {
         }
     }
 
-    void Timer()
+    private void FixedUpdate()
     {
-        curTime += Time.deltaTime;
-        if (curTime >= 1)
+        if (isGameReady)
         {
-            time += 1;
-            curTime = 0;
-        }
-    }
+            curPlus += Time.deltaTime;
+            if (curPlus > 1f)
+            {
+                curTime += 1;
+                curPlus = 0;
+            }
 
-    private void Update()
-    {
-        Timer();
-        if (time >= spawnerManager[_DayCount].timerByIndex)
-        {
-            //FINISH
+            if(curTime == time)
+                DestroyAllEncounters();
         }
     }
 }

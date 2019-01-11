@@ -272,6 +272,7 @@
     <Compile Include="Assets\Scripts\Gameplay\EncounterBehaviour.cs" />
     <Compile Include="Assets\Scripts\Gameplay\GameplayManager.cs" />
     <Compile Include="Assets\Scripts\Gameplay\GrassTriggerManager.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\LimitBarrier.cs" />
     <Compile Include="Assets\Scripts\Gameplay\PlayerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Gameplay\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Reuseable\Backeend.cs" />
