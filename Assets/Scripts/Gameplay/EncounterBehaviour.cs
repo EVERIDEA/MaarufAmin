@@ -56,7 +56,7 @@ public abstract class EncounterBehaviour : MonoBehaviour {
     {
         yield return new WaitForSeconds(time);
         OnDead();
-        PlayerBehaviour.thisClass.isOnCathingPeople = false;
+        //PlayerBehaviour.thisClass.isOnCathingPeople = false;
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }

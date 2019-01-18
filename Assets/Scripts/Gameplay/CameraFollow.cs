@@ -41,7 +41,7 @@ public class CameraFollow : MonoBehaviour {
             smoothPosition.z);
         }
 
-        if (GameplayManager.thisClass.isGameReady)
+        if (GameController.Instance.DataGameplay.IsGameReady)
         {
             if (camera.orthographicSize > 7.5)
             {

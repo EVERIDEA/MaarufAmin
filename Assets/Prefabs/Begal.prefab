@@ -100,14 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 2
-  _Rotation: {x: 0, y: 0, z: -180}
-  _Jump: {x: 20, y: 0, z: 0}
-  _MovementSpeed: 2
-  _PanicMovementSpeed: 3
-  _PanicMaxTime: 4
-  _Direction: 1
-  curMoveSpeed: 0
-  isRob: 0
+  ScriptableData: {fileID: 0}
 --- !u!212 &212162131005187272
 SpriteRenderer:
   m_ObjectHideFlags: 1
