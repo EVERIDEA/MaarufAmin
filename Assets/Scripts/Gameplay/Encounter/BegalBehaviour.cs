@@ -4,7 +4,7 @@ using DG.Tweening;
 
 public class BegalBehaviour : EncounterBehaviour
 {
-    Tween _Tween;
+    Tween tween;
     private BegalData dataBegal;
 
     PlayerData playerData;
@@ -17,6 +17,7 @@ public class BegalBehaviour : EncounterBehaviour
 
     private void InitializeDataListener(InitializeDataEvent<BegalData> e)
     {
+        Debug.Log($@"On Initialize : {e.Data.JumpPower}");
         playerData = GameController.Instance.GetGameplayData<PlayerData>("player.data");
 
         dataBegal = BegalData.CopyData(e.Data);
@@ -32,8 +33,8 @@ public class BegalBehaviour : EncounterBehaviour
     protected override void OnDead()
     {
         dataBegal.Jump = new Vector2(dataBegal.Jump.x * playerData.direction, dataBegal.Jump.y);
-        _Tween = transform.DORotate(dataBegal.Rotation, dataBegal.RotationSpeed, RotateMode.Fast);
-        _Tween = transform.DOJump(dataBegal.Jump, dataBegal.JumpPower, 1, dataBegal.JumpDuration, false);
+        tween = transform.DORotate(dataBegal.Rotation, dataBegal.RotationSpeed, RotateMode.Fast);
+        tween = transform.DOJump(dataBegal.Jump, dataBegal.JumpPower, 1, dataBegal.JumpDuration, false);
     }
 
     //procedure when encounter were idle
@@ -95,19 +96,19 @@ public class BegalBehaviour : EncounterBehaviour
     {
         if (dataBegal.IsOnCatch)
         {
-            //if (PlayerBehaviour.thisClass.direction == -1)
-            //{
-            //    transform.position = new Vector2(
-            //        PlayerBehaviour.thisClass.transform.position.x - 2f,
-            //        PlayerBehaviour.thisClass.transform.position.y);
-            //}
-            //else
-            //{
-            //    transform.position = new Vector2(
-            //         PlayerBehaviour.thisClass.transform.position.x + 2f,
-            //         PlayerBehaviour.thisClass.transform.position.y);
+            if (Player.Instance.DataPlayer.direction == -1)
+            {
+                transform.position = new Vector2(
+                    Player.Instance.transform.position.x - 2f,
+                    Player.Instance.transform.position.y);
+            }
+            else
+            {
+                transform.position = new Vector2(
+                    Player.Instance.transform.position.x + 2f,
+                    Player.Instance.transform.position.y);
 
-            //}
+            }
 
             if (dataBegal.IsRob)
             {
@@ -146,25 +147,25 @@ public class BegalBehaviour : EncounterBehaviour
     {
         if (collision.tag.Equals("Player"))
         {
-            //if (!PlayerBehaviour.thisClass.isOnGrass)
-            //{
-            //    if (!PlayerBehaviour.thisClass.isOnCathingPeople)
-            //    {
-            //        isOnCatch = true;
-            //        InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
-            //    }
-            //}
+            if (!Player.Instance.DataPlayer.isOnGrass)
+            {
+                if (!Player.Instance.DataPlayer.isOnCathingPeople)
+                {
+                    //isOnCatch = true;
+                    InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+                }
+            }
         }
-        //if (!PlayerBehaviour.thisClass.isOnGrass)
-        //{
-        //    if (collision.tag.Equals("PanicTrigger"))
-        //    {
-        //        if (panicTime < _PanicMaxTime)
-        //        {
-        //            InitEncounterBehaviour(EEncounterBehaviourType.RUN);
-        //        }
-        //    }
-        //}
+        if (!Player.Instance.DataPlayer.isOnGrass)
+        {
+            if (collision.tag.Equals("PanicTrigger"))
+            {
+                if (dataBegal.PanicTime < dataBegal.PanicMaxTime)
+                {
+                    InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                }
+            }
+        }
 
         if (collision.tag.Equals("People"))
         {
@@ -184,35 +185,35 @@ public class BegalBehaviour : EncounterBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //if (!PlayerBehaviour.thisClass.isOnGrass)
-        //{
-        //    if (collision.tag.Equals("PanicTrigger"))
-        //    {
-        //        if(checkMethodRun == 0)
-        //        {
-        //            if (panicTime < _PanicMaxTime)
-        //            {
-        //                InitEncounterBehaviour(EEncounterBehaviourType.RUN);
-        //            }
-        //            checkMethodRun = checkMethodRun + 1;
-        //        }
-        //    }
-        //}
+        if (!Player.Instance.DataPlayer.isOnGrass)
+        {
+            if (collision.tag.Equals("PanicTrigger"))
+            {
+                //if (checkMethodRun == 0)
+                //{
+                //    if (panicTime < _PanicMaxTime)
+                //    {
+                //        InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                //    }
+                //    checkMethodRun = checkMethodRun + 1;
+                //}
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        //if (!PlayerBehaviour.thisClass.isOnGrass)
-        //{
-        //    if (collision.tag.Equals("PanicTrigger"))
-        //    {
-        //        isOnCatch = false;
-        //        if (panicTime < _PanicMaxTime)
-        //        {
-        //            StartCoroutine(BackToNormal(1));
-        //        }
-        //    }
-        //}
+        if (!Player.Instance.DataPlayer.isOnGrass)
+        {
+            if (collision.tag.Equals("PanicTrigger"))
+            {
+                //isOnCatch = false;
+                //if (panicTime < _PanicMaxTime)
+                //{
+                //    StartCoroutine(BackToNormal(1));
+                //}
+            }
+        }
     }
 
     //time to check if encounter not panic anymore

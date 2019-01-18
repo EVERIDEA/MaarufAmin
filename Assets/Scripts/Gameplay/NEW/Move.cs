@@ -34,7 +34,7 @@ public class Move : StateComponentBase<Player>
 
     }
 
-    void Update()
+    protected override void OnUpdateFrame(float deltaTime)
     {
         if (GameController.Instance.DataGameplay.IsGameReady)
         {

@@ -5,7 +5,7 @@ using System.Collections;
 /// <summary>
 /// Abstract class witch represents the components associated with a base behaviour class<T>
 /// </summary>
-public abstract class StateComponentBase<T> : MonoBehaviour where T : GameStateMachine<T>
+public abstract class StateComponentBase<T> : BaseBehaviour where T : GameStateMachine<T>
 {
     protected T Behaviour;
 

@@ -1008,7 +1008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5159c17fa0ea2b7488cb21cf74a010ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Identifier: button.menuui:action=name,type=type,value=val
+  Identifier: button.menuui:action=menu.close,type=type,value=val
 --- !u!1 &315274405
 GameObject:
   m_ObjectHideFlags: 0
@@ -5357,7 +5357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5159c17fa0ea2b7488cb21cf74a010ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Identifier: button.menuui:action=name,type=type,value=val
+  Identifier: button.menuui:action=menu.close,type=type,value=val
 --- !u!1 &1638810114
 GameObject:
   m_ObjectHideFlags: 0
@@ -5747,8 +5747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d1cd5f4e4539e4fba74d2c3b1a4382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PanelUI: {fileID: 1827531576}
   IsActive: 0
+  PanelUI: {fileID: 1827531576}
 --- !u!114 &1709530644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5760,8 +5760,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f18925943e61d4b85fc72d560106be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PanelUI: {fileID: 160251834}
   IsActive: 0
+  PanelUI: {fileID: 160251834}
 --- !u!114 &1709530645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5773,8 +5773,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01b953ce4c92498d93f8c651b003b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PanelUI: {fileID: 15093776}
   IsActive: 0
+  PanelUI: {fileID: 15093776}
 --- !u!114 &1709530646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5786,8 +5786,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cffb9402ca2b465bb66efe7c799e869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PanelUI: {fileID: 431809614}
   IsActive: 0
+  PanelUI: {fileID: 431809614}
 --- !u!114 &1709530647
 MonoBehaviour:
   m_ObjectHideFlags: 0

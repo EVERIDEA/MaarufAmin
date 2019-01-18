@@ -32,7 +32,7 @@ public class Menu : GameStateMachine<Menu>
 
     private void OnSignalReceived(Dictionary<string, object> eventParam)
     {
-        var action = (String)eventParam["action"];
+        var action = (String) eventParam["action"];
         Debug.Log("Signal Received");
         switch (action) {
             case "menu.play":
@@ -57,9 +57,9 @@ public class Menu : GameStateMachine<Menu>
             case "story.play":
                 Application.LoadLevel("Game");
                 break;
-            default:
-                ChangeToPreviousState();
-                break;
+            //default:
+            //    ChangeToPreviousState();
+            //    break;
         }
     }
 

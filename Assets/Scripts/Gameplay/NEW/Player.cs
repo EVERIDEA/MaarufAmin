@@ -20,6 +20,7 @@ public class Player : GameStateMachine<Player> {
     public static Player Instance
     {
         get
+
         {
             if (_instance == null)
                 _instance = GameObject.FindObjectOfType<Player>();

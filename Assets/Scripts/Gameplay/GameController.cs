@@ -121,7 +121,7 @@ public class GameController : Singleton<GameController>
         newObject.transform.localPosition = new Vector2(0, yPosition[Random.Range(0, yPosition.Length)]);
     }
 
-    private void FixedUpdate()
+    protected override void OnUpdateFrame(float deltaTime)
     {
         if (dataGameplay.IsGameReady)
         {

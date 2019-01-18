@@ -12,13 +12,9 @@ public class Options : StateComponentBase<Menu>
     //[SerializeField]
     //private Slider soundFXSlider;
 
-    private void Start()
+    protected override void OnStart()
     {
-        //musicSlider.value = AudioManager.Instance.MusicEnvironment.volume;
-        //soundFXSlider.value = AudioManager.Instance.SoundFX.volume;
-
-        //musicSlider.onValueChanged.AddListener(AudioManager.Instance.SetMusicVolume);
-        //soundFXSlider.onValueChanged.AddListener(AudioManager.Instance.SetSoundFXVolume);
+        base.OnStart();
     }
 
     public override void EnterState()
@@ -37,16 +33,13 @@ public class Options : StateComponentBase<Menu>
         PanelUI.SetActive(false);
     }
 
-    private void Update()
+    protected override void OnUpdateFrame(float deltaTime)
     {
-        //if(IsActive)
-        //    optionPanel.localPosition = Vector3.Lerp(optionPanel.localPosition, new Vector3(0,0,0), slideSpeed * Time.deltaTime);
-        //else
-        //    optionPanel.localPosition = Vector3.Lerp(optionPanel.localPosition, new Vector3(0,-800,0), slideSpeed * Time.deltaTime);
+        base.OnUpdateFrame(deltaTime);
     }
 
-    public void GoBack()
-    {
-        Behaviour.ChangeToPreviousState();
-    }
+    //public void GoBack()
+    //{
+    //    Behaviour.ChangeToPreviousState();
+    //}
 }
