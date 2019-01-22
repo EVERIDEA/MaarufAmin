@@ -68,15 +68,15 @@ public class Move : StateComponentBase<Player>
             playerTransform.position = Vector2.MoveTowards(playerTransform.position, mousePos2D, speed * Time.deltaTime);
         }
 
-        if (GrassTriggerManager.thisClass.isClickOnGrass)
+        if (GrassTriggerManager.Instance.isClickOnGrass)
         {
             if (playerTransform.position.x == mousePos2D.x)
             {
-                if (GrassTriggerManager.thisClass.isReadyToGrass)
+                if (GrassTriggerManager.Instance.isReadyToGrass)
                 {
-                    //PlayerBehaviour.thisClass.isOnGrass = true;
                     isOnPlaying = false;
-                    GrassTriggerManager.thisClass.isClickOnGrass = false;
+                    GrassTriggerManager.Instance.isClickOnGrass = false;
+                    Player.Instance.DataPlayer.isOnGrass = true;
                 }
             }
         }

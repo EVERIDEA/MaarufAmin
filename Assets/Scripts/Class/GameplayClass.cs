@@ -25,11 +25,3 @@ public class GameplayData {
         Encounters = encounters;
     }
 }
-
-[System.Serializable]
-public class Spawner
-{
-    public int countOfSpawnerSpawnEncounter;
-    public int maxTimeEncounterSpawn;
-    public int timerByIndex;
-}

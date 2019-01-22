@@ -26,6 +26,7 @@ public class PersBehaviour : EncounterBehaviour
         //target = PlayerBehaviour.thisClass.transform;
         curScale = GetComponent<Transform>().localScale;
         InitEncounterBehaviour(EEncounterBehaviourType.WALKING);
+        target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     protected override void OnDead()

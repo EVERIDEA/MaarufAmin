@@ -6,29 +6,26 @@ public class BegalBehaviour : EncounterBehaviour
 {
     Tween tween;
     private BegalData dataBegal;
-
     PlayerData playerData;
+    public float curMoveSpeed;
+    public float curPanicMoveSpeed;
+    public int Direction;
     //state initialize
-
     private void Awake()
     {
         EventManager.AddListener<InitializeDataEvent<BegalData>>(InitializeDataListener);
     }
-
     private void InitializeDataListener(InitializeDataEvent<BegalData> e)
     {
-        Debug.Log($@"On Initialize : {e.Data.JumpPower}");
+       // Debug.Log($@"On Initialize : {e.Data.JumpPower}");
         playerData = GameController.Instance.GetGameplayData<PlayerData>("player.data");
 
         dataBegal = BegalData.CopyData(e.Data);
 
-        dataBegal.MovementSpeed = dataBegal.Direction;
-        dataBegal.TempPanicMovement = dataBegal.PanicMovementSpeed;
-        dataBegal.CurMoveSpeed = dataBegal.MovementSpeed;
-
+        curMoveSpeed = dataBegal.Direction;
+        curPanicMoveSpeed = dataBegal.PanicMovementSpeed;
         InitEncounterBehaviour(EEncounterBehaviourType.WALKING);
     }
-
     //procedure when encounter were killed
     protected override void OnDead()
     {
@@ -36,62 +33,56 @@ public class BegalBehaviour : EncounterBehaviour
         tween = transform.DORotate(dataBegal.Rotation, dataBegal.RotationSpeed, RotateMode.Fast);
         tween = transform.DOJump(dataBegal.Jump, dataBegal.JumpPower, 1, dataBegal.JumpDuration, false);
     }
-
     //procedure when encounter were idle
     protected override void OnIdle()
     {
         RobbingHandler();
     }
-
     //procedure when encounter were running
     protected override void OnRun()
     {
         switch (dataBegal.Direction)
         {
             case -1:
-                dataBegal.PanicMovementSpeed = dataBegal.PanicMovementSpeed * 1;
+                curPanicMoveSpeed = dataBegal.PanicMovementSpeed * 1;
                 break;
             case 1:
-                dataBegal.PanicMovementSpeed = dataBegal.PanicMovementSpeed * -1;
+                curPanicMoveSpeed = dataBegal.PanicMovementSpeed * -1;
                 break;
         }
-        dataBegal.CurMoveSpeed = dataBegal.PanicMovementSpeed;
+        curPanicMoveSpeed = dataBegal.PanicMovementSpeed;
         if(dataBegal.IsOnCatch)
             dataBegal.PanicTime += 1;
     }
-
     //procedure when encounter were walking
     protected override void OnWalking()
     {
-        dataBegal.CurMoveSpeed = dataBegal.MovementSpeed;
+        curMoveSpeed = dataBegal.MovementSpeed;
     }
-
     //procedure when encounter were facing to the direction
     void CheckFlip(float dir)
     {
         if (!dataBegal.IsOnCatch)
         {
             if (dir < 0)
-                dataBegal.Direction = -1;
+                Direction = -1;
             else
-                dataBegal.Direction = 1;
-            transform.localScale = new Vector2(dataBegal.Direction, transform.localScale.y);
+                Direction = 1;
+            transform.localScale = new Vector2(Direction, transform.localScale.y);
         }
     }
 
-    //procedure to check State of walk
     void WalkBehaviour()
     {
         if (!dataBegal.IsOnCatch)
         {
-            CheckFlip(dataBegal.CurMoveSpeed);
+            CheckFlip(curMoveSpeed);
             transform.position = new Vector2(
-                        transform.position.x + Time.deltaTime * dataBegal.CurMoveSpeed,
+                        transform.position.x + Time.deltaTime * curMoveSpeed,
                         transform.position.y);
         }
     }
 
-    //procedure to check State of catching
     void CatchHandler()
     {
         if (dataBegal.IsOnCatch)
@@ -142,44 +133,41 @@ public class BegalBehaviour : EncounterBehaviour
             }
         }
     }
-
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag.Equals("Player"))
+        switch (collision.tag)
         {
-            if (!Player.Instance.DataPlayer.isOnGrass)
-            {
-                if (!Player.Instance.DataPlayer.isOnCathingPeople)
+            case "Player":
+                if (!Player.Instance.DataPlayer.isOnGrass)
                 {
-                    //isOnCatch = true;
-                    InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+                    if (!Player.Instance.DataPlayer.isOnCathingPeople)
+                    {
+                        dataBegal.IsOnCatch = true;
+                        InitEncounterBehaviour(EEncounterBehaviourType.DEAD);
+                    }
                 }
-            }
-        }
-        if (!Player.Instance.DataPlayer.isOnGrass)
-        {
-            if (collision.tag.Equals("PanicTrigger"))
-            {
-                if (dataBegal.PanicTime < dataBegal.PanicMaxTime)
+                break;
+            case "PanicTrigger":
+                if (!Player.Instance.DataPlayer.isOnGrass)
                 {
-                    InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                    if (dataBegal.PanicTime < dataBegal.PanicMaxTime)
+                    {
+                        InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                    }
                 }
-            }
-        }
-
-        if (collision.tag.Equals("People"))
-        {
-            if (!collision.GetComponent<PeopleBehaviour>().isRobbed)
-            {
-                dataBegal.IsRob = true;
-                collision.GetComponent<PeopleBehaviour>().isRobbed = true;
-            }
-            InitEncounterBehaviour(EEncounterBehaviourType.IDLE);
-        }
-
-        if (collision.tag.Equals("PeopleTrigger"))
-        {
-            dataBegal.CurMoveSpeed = dataBegal.CurMoveSpeed * 3;
+                break;
+            case "People":
+                if (!collision.GetComponent<PeopleBehaviour>().isRobbed)
+                {
+                    dataBegal.IsRob = true;
+                    collision.GetComponent<PeopleBehaviour>().isRobbed = true;
+                }
+                InitEncounterBehaviour(EEncounterBehaviourType.IDLE);
+                break;
+            case "PeopleTrigger":
+                curMoveSpeed = dataBegal.CurMoveSpeed * 3;
+                break;
         }
     }
 
@@ -189,14 +177,14 @@ public class BegalBehaviour : EncounterBehaviour
         {
             if (collision.tag.Equals("PanicTrigger"))
             {
-                //if (checkMethodRun == 0)
-                //{
-                //    if (panicTime < _PanicMaxTime)
-                //    {
-                //        InitEncounterBehaviour(EEncounterBehaviourType.RUN);
-                //    }
-                //    checkMethodRun = checkMethodRun + 1;
-                //}
+                if (dataBegal.CheckMethodRun == 0)
+                {
+                    if (dataBegal.PanicTime < dataBegal.PanicMaxTime)
+                    {
+                        InitEncounterBehaviour(EEncounterBehaviourType.RUN);
+                    }
+                    dataBegal.CheckMethodRun = dataBegal.CheckMethodRun + 1;
+                }
             }
         }
     }
@@ -207,21 +195,20 @@ public class BegalBehaviour : EncounterBehaviour
         {
             if (collision.tag.Equals("PanicTrigger"))
             {
-                //isOnCatch = false;
-                //if (panicTime < _PanicMaxTime)
-                //{
-                //    StartCoroutine(BackToNormal(1));
-                //}
+                dataBegal.IsOnCatch = false;
+                if (dataBegal.PanicTime < dataBegal.PanicMaxTime)
+                {
+                    StartCoroutine(BackToNormal(1));
+                }
             }
         }
     }
-
-    //time to check if encounter not panic anymore
+    
     IEnumerator BackToNormal(float time)
     {
         yield return new WaitForSeconds(time);
-        dataBegal.CurMoveSpeed = dataBegal.MovementSpeed;
-        dataBegal.PanicMovementSpeed = dataBegal.TempPanicMovement;
+        curMoveSpeed = dataBegal.MovementSpeed;
+        curPanicMoveSpeed = dataBegal.TempPanicMovement;
         dataBegal.CheckMethodRun = 0;
     }
 }

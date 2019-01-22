@@ -9,8 +9,9 @@ public class GameController : Singleton<GameController>
     
     public Transform [] spawnerTransform;
     [SerializeField]
-    private List<Spawner> spawn;
-    
+    private int[] enounterInLevel;
+    private int curEncounterSpawned;
+
     private GameplayData dataGameplay;
     public GameplayData DataGameplay
     {
@@ -59,7 +60,7 @@ public class GameController : Singleton<GameController>
 
     public void InitGameplay()
     {
-        dataGameplay.Time = spawn[dataGameplay.DayCount].timerByIndex;
+        dataGameplay.Time = enounterInLevel[0];
         StartCoroutine(SpawnEncounter(5));
     }
 
@@ -72,10 +73,11 @@ public class GameController : Singleton<GameController>
     
     IEnumerator SpawnEncounter(float timeToSpawn)
     {
-        while (dataGameplay.IsGameReady)
+        while (curEncounterSpawned != dataGameplay.Time)
         {
             SpawnEncounter(spawnerTransform[Random.Range(0, spawnerTransform.Length)], dataGameplay.Encounters[Random.Range(0, dataGameplay.Encounters.Length)]);
             yield return new WaitForSeconds(timeToSpawn);
+            curEncounterSpawned += 1;
         }
     }
 
@@ -92,7 +94,7 @@ public class GameController : Singleton<GameController>
             {
                 case EEncounterType.BEGAL:
                     EventManager.TriggerEvent(new InitializeDataEvent<BegalData>(dataBegalB));
-                    //newObject.GetComponent<BegalBehaviour>()._Direction = (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<BegalBehaviour>().Direction = (int) (newObject.GetComponent<BegalBehaviour>().curMoveSpeed);
                     break;
                 //case EEncounterType.PEOPLE:
                 //    newObject.GetComponent<PeopleBehaviour>()._Direction = (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
@@ -108,7 +110,7 @@ public class GameController : Singleton<GameController>
             {
                 case EEncounterType.BEGAL:
                     EventManager.TriggerEvent(new InitializeDataEvent<BegalData>(dataBegalA));
-                    //newObject.GetComponent<BegalBehaviour>()._Direction = (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<BegalBehaviour>().Direction = (int) -(newObject.GetComponent<BegalBehaviour>().curMoveSpeed);
                     break;
                 //case EEncounterType.PEOPLE:
                 //    newObject.GetComponent<PeopleBehaviour>()._Direction = (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
@@ -132,7 +134,7 @@ public class GameController : Singleton<GameController>
                 dataGameplay.CurrentPlus = 0;
             }
 
-            if (dataGameplay.CurrentTime == dataGameplay.Time)
+            if (dataGameplay.Time == curEncounterSpawned)
                 DestroyAllEncounters();
         }
     }
