@@ -23,9 +23,10 @@ public class PersBehaviour : EncounterBehaviour
     void InitPeopleBehaviour()
     {
         _Speed = _Speed * _Direction;
-        target = PlayerBehaviour.thisClass.transform;
+        //target = PlayerBehaviour.thisClass.transform;
         curScale = GetComponent<Transform>().localScale;
         InitEncounterBehaviour(EEncounterBehaviourType.WALKING);
+        target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     protected override void OnDead()
@@ -53,7 +54,7 @@ public class PersBehaviour : EncounterBehaviour
         float distance = Vector2.Distance(kiGuruTransform.position,transform.position);
         if (distance >= 0 && distance < maxDistance)
         { //In a Distance            
-            if (!PlayerBehaviour.thisClass.isOnGrass)
+            if (!Player.Instance.DataPlayer.isOnGrass)
             {
                 // On Follow ki Guru
                 isOnFollow = true;
@@ -65,7 +66,7 @@ public class PersBehaviour : EncounterBehaviour
         }
         else
         {
-            if (PlayerBehaviour.thisClass.isOnGrass)
+            if (Player.Instance.DataPlayer.isOnGrass)
             {
                 isOnFollow = false;
             }
@@ -75,9 +76,9 @@ public class PersBehaviour : EncounterBehaviour
     Vector3 ChecLookPos()
     {
         Vector3 newPos;
-        if (PlayerBehaviour.thisClass.direction == 1)
+        if (Player.Instance.DataPlayer.direction == 1)
         {
-            return newPos = new Vector3(-6, 0,0);
+            return newPos = new Vector3(-6, 0, 0);
         }
         else
         {

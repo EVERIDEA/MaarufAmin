@@ -2,15 +2,21 @@
 
 public class GrassTriggerManager : MonoBehaviour {
 
-    public static GrassTriggerManager thisClass;
+    private static GrassTriggerManager _instance;
+
+    public static GrassTriggerManager Instance {
+        get
+        {
+            if (_instance == null)
+                _instance = GameObject.FindObjectOfType<GrassTriggerManager>();
+            return _instance;
+        }
+    }
 
     public bool isClickOnGrass = false;
     public bool isReadyToGrass = false;
 
-    private void Start()
-    {
-        thisClass = this;
-    }
+    Player player;
 
     private void OnMouseDown()
     {
@@ -22,7 +28,7 @@ public class GrassTriggerManager : MonoBehaviour {
     {
         if (collision.gameObject.tag.Equals("Player"))
         {
-            if(!PlayerBehaviour.thisClass.isOnCathingPeople)
+            if (!Player.Instance.DataPlayer.isOnCathingPeople)
                 isReadyToGrass = true;
         }
     }
@@ -31,7 +37,7 @@ public class GrassTriggerManager : MonoBehaviour {
     {
         if (collision.gameObject.tag.Equals("Player"))
         {
-            if (!PlayerBehaviour.thisClass.isOnCathingPeople)
+            if (!Player.Instance.DataPlayer.isOnCathingPeople)
                 isReadyToGrass = false;
         }
     }
