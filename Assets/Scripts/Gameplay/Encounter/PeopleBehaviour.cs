@@ -13,6 +13,7 @@ public class PeopleBehaviour : EncounterBehaviour
     
     SpriteRenderer render;
     Color color;
+    
 
     private void Start()
     {

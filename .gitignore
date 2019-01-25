@@ -7,3 +7,5 @@ Assets/BigAssets/
 Packages/manifest.json
 Test.apk
 *.apk
+Assets/Resources/
+Assets/Resources.meta

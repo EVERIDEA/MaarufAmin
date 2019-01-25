@@ -7,32 +7,43 @@ public class GameplayManager : MonoBehaviour
 
     public static GameplayManager thisClass;
     
-    public bool isGameReady = false;
-    public bool isGameReset = false;
+    public bool IsGameReady = false;
+    public bool IsGameReset = false;
+    public GameObject GrassPosition;
 
     [Header("Level Index")]
     public int _DayCount;
 
-    [Header("Assign Spawners")]
-    public GameObject[] _SpawnerTransform;
+    [Header("Assign Encouonter Spawners")]
+    public GameObject[] EncounterSpawnerTransform;
+
+    [Header("Assign People Spawners")]
+    public GameObject[] PeopleSpawnerTransform;
+
+    [Header("Assign Pers Spawners")]
+    public GameObject[] PersSpawnerTransform;
 
     [Header("Assign some encounters")]
-    public GameObject[] _Encounters;
+    public GameObject Encounters;
+
+    [Header("Assign some People")]
+    public GameObject People;
+
+    [Header("Assign some Pers")]
+    public GameObject Pers;
 
     [Header("Spawner Manager")]
     [Tooltip("Spawner manager is deferent, depend on game design by level.")]
-    public List<SpawnerManager> spawnerManager;
-
-    [SerializeField]
-    float curTime = 0;
-    [SerializeField]
-    float curPlus = 0;
-
-    [SerializeField]
-    float time = 0;
+    public List<Spawner> maxSpawnerByLevel;
 
     [SerializeField]
     bool breakingUp = false;
+
+    [SerializeField]
+    int curEncounter = 0;
+    [SerializeField]
+    int curPeople = 0;
+
     // Use this for initialization
     private void Awake()
     {
@@ -46,47 +57,78 @@ public class GameplayManager : MonoBehaviour
 
     public void InitEncounterSpawn()
     {
-        time = spawnerManager[_DayCount].timerByIndex;
-        StartCoroutine(SpawnEncounter(5));
+        StartCoroutine(Spawn(SpawnerType.PEOPLE, 3));
+        StartCoroutine(Spawn(SpawnerType.ENCOUNTER, 5));
+        StartCoroutine(Spawn(SpawnerType.PERS, 5));
     }
 
-    void DestroyAllEncounters()
-    {
-        for (int i = 0; i <= (_SpawnerTransform.Length - 1); i++)
-        {
-            if (_SpawnerTransform[i].transform.childCount > 0)
-            {
-                for (int j = 0; j <= (_SpawnerTransform[i].transform.childCount - 1); j++)
-                {
-                    Color color = _SpawnerTransform[i].transform.GetChild(j)
-                        .gameObject.GetComponent<SpriteRenderer>().color;
-                    color.a -= Time.deltaTime * 5f;
-                    _SpawnerTransform[i].transform.GetChild(j)
-                        .gameObject.GetComponent<SpriteRenderer>().color = color;
-                    if (_SpawnerTransform[i].transform.GetChild(j)
-                        .gameObject.GetComponent<SpriteRenderer>().color.a <= 0.001)
-                    {
-                        Destroy(_SpawnerTransform[i].transform.GetChild(j).gameObject);
-                        ResetGame();
-                    }
-                }
-            }
-        }
-    }
+    //void DestroyAllEncounters()
+    //{
+    //    for (int i = 0; i <= (EncounterSpawnerTransform.Length - 1); i++)
+    //    {
+    //        if (EncounterSpawnerTransform[i].transform.childCount > 0)
+    //        {
+    //            for (int j = 0; j <= (EncounterSpawnerTransform[i].transform.childCount - 1); j++)
+    //            {
+    //                Color color = EncounterSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color;
+    //                color.a -= Time.deltaTime * 5f;
+    //                EncounterSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color = color;
+    //                if (EncounterSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color.a <= 0.001)
+    //                {
+    //                    Destroy(EncounterSpawnerTransform[i].transform.GetChild(j).gameObject);
+    //                }
+    //            }
+    //        }
+    //    }
 
-    void ResetGame()
-    {
-        isGameReady = false;
-        curTime = 0;
-        curPlus = 0;
-        time = 0;
-        isGameReset = true;
-    }
+    //    for (int i = 0; i <= (PeopleSpawnerTransform.Length - 1); i++)
+    //    {
+    //        if (PeopleSpawnerTransform[i].transform.childCount > 0)
+    //        {
+    //            for (int j = 0; j <= (PeopleSpawnerTransform[i].transform.childCount - 1); j++)
+    //            {
+    //                Color color = PeopleSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color;
+    //                color.a -= Time.deltaTime * 5f;
+    //                PeopleSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color = color;
+    //                if (PeopleSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color.a <= 0.001)
+    //                {
+    //                    Destroy(PeopleSpawnerTransform[i].transform.GetChild(j).gameObject);
+    //                }
+    //            }
+    //        }
+    //    }
 
-    void SpawnEncounter(GameObject parent, GameObject encounter)
+    //    for (int i = 0; i <= (PersSpawnerTransform.Length - 1); i++)
+    //    {
+    //        if (PersSpawnerTransform[i].transform.childCount > 0)
+    //        {
+    //            for (int j = 0; j <= (PersSpawnerTransform[i].transform.childCount - 1); j++)
+    //            {
+    //                Color color = PersSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color;
+    //                color.a -= Time.deltaTime * 5f;
+    //                PersSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color = color;
+    //                if (PersSpawnerTransform[i].transform.GetChild(j)
+    //                    .gameObject.GetComponent<SpriteRenderer>().color.a <= 0.001)
+    //                {
+    //                    Destroy(PersSpawnerTransform[i].transform.GetChild(j).gameObject);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    void SpawnEncounter(GameObject parent, GameObject objectSpawn)
     {
         float[] yPosition = { 1f, -1f, 2.5f };
-        GameObject newObject = Instantiate(encounter, parent.transform);
+        GameObject newObject = Instantiate(objectSpawn, parent.transform);
         newObject.transform.SetParent(parent.transform);
         var name = newObject.GetComponent<EncounterBehaviour>().Type;
         if (parent.name.Equals("[RIGHT]"))
@@ -98,12 +140,12 @@ public class GameplayManager : MonoBehaviour
                         (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
                 case EEncounterType.PEOPLE:
-                    newObject.GetComponent<PeopleBehaviour>()._Direction =
-                        (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<PeopleBehaviour>()._Speed = 
+                        -newObject.GetComponent<PeopleBehaviour>()._Speed;
                     break;
                 case EEncounterType.PERS:
-                    newObject.GetComponent<PersBehaviour>()._Direction =
-                        (int)-(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<PersBehaviour>()._Speed =
+                        -newObject.GetComponent<PersBehaviour>()._Speed;
                     break;
             }
         }
@@ -113,51 +155,105 @@ public class GameplayManager : MonoBehaviour
             {
                 case EEncounterType.BEGAL:
                     newObject.GetComponent<BegalBehaviour>()._Direction =
-                        (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                        (int) (newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
                     break;
                 case EEncounterType.PEOPLE:
-                    newObject.GetComponent<PeopleBehaviour>()._Direction =
-                        (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<PeopleBehaviour>()._Speed =
+                        newObject.GetComponent<PeopleBehaviour>()._Speed;
                     break;
                 case EEncounterType.PERS:
-                    newObject.GetComponent<PersBehaviour>()._Direction =
-                        (int)(newObject.GetComponent<BegalBehaviour>()._MovementSpeed);
+                    newObject.GetComponent<PersBehaviour>()._Speed =
+                       newObject.GetComponent<PersBehaviour>()._Speed;
                     break;
             }
         }
         newObject.transform.localPosition = new Vector2(0, yPosition[Random.Range(0, yPosition.Length)]);
     }
 
-    IEnumerator SpawnEncounter(float timeToSpawn)
+    IEnumerator Spawn(SpawnerType e, float timeToSpawn)
     {
-        while (isGameReady)
-        {
-            SpawnEncounter(_SpawnerTransform[Random.Range(0, _SpawnerTransform.Length)], _Encounters[Random.Range(0, _Encounters.Length)]);
-            yield return new WaitForSeconds(timeToSpawn);
+        switch (e) {
+            case SpawnerType.ENCOUNTER:
+                while (curEncounter != maxSpawnerByLevel[_DayCount].EncounterMax)
+                {
+                    SpawnEncounter(EncounterSpawnerTransform[Random.Range(0, EncounterSpawnerTransform.Length)], Encounters);
+                    yield return new WaitForSeconds(timeToSpawn);
+                    curEncounter += 1;
+                }
+                break;
+            case SpawnerType.PEOPLE:
+                while (curPeople != maxSpawnerByLevel[_DayCount].PeopleMax)
+                {
+                    SpawnEncounter(PeopleSpawnerTransform[Random.Range(0, PeopleSpawnerTransform.Length)], People);
+                    yield return new WaitForSeconds(timeToSpawn);
+                    curPeople += 1;
+                }
+                break;
+            case SpawnerType.PERS:
+                SpawnEncounter(PersSpawnerTransform[Random.Range(0, PersSpawnerTransform.Length)], Pers);
+                break;
         }
+
     }
 
-    private void FixedUpdate()
+    private bool IsStageClear()
     {
-        if (isGameReady)
+        bool isEncounterClear = false;
+        bool isPeopleClear = false;
+        bool isPersClear = false;
+        foreach (GameObject encounterSpawner in EncounterSpawnerTransform)
         {
-            curPlus += Time.deltaTime;
-            if (curPlus > 1f)
-            {
-                curTime += 1;
-                curPlus = 0;
-            }
+            if (encounterSpawner.transform.childCount == 0) isEncounterClear = true;
+            else isEncounterClear = false;
+        }
+        foreach (GameObject peopleSpawner in PeopleSpawnerTransform)
+        {
+            if (peopleSpawner.transform.childCount == 0) isPeopleClear = true;
+            else isPeopleClear = false;
+        }
+        foreach (GameObject persSpawner in PersSpawnerTransform)
+        {
+            if (persSpawner.transform.childCount == 0) isPersClear = true;
+            else isPersClear = false;
+        }
 
-            if(curTime == time)
-                DestroyAllEncounters();
+        if (!IsGameReset && isEncounterClear && isPersClear && isPeopleClear)
+            return true;
+        else
+            return false;
+    }
+
+    private void Update()
+    {
+            if (curEncounter == maxSpawnerByLevel[_DayCount].EncounterMax &&
+                curPeople == maxSpawnerByLevel[_DayCount].PeopleMax)
+            {
+                if (IsStageClear())
+                    ResetGame();
+                    //DestroyAllEncounters();
+            }
+    }
+    
+    void ResetGame()
+    {
+        PlayerBehaviour.thisClass.gameObject.transform.position
+            = Vector2.MoveTowards(GrassPosition.transform.position,PlayerBehaviour.thisClass.gameObject.transform.position, Time.deltaTime * 5);
+        if (PlayerBehaviour.thisClass.gameObject.transform.position == GrassPosition.transform.position)
+        {            
+            IsGameReset = true;
+            curEncounter = 0;
+            curPeople = 0;
         }
     }
 }
 
 [System.Serializable]
-public class SpawnerManager
+public class Spawner{
+    public int EncounterMax;
+    public int PeopleMax;
+}
+
+public enum SpawnerType
 {
-    public int countOfSpawnerSpawnEncounter;
-    public int maxTimeEncounterSpawn;
-    public int timerByIndex;
+    ENCOUNTER,PEOPLE,PERS
 }

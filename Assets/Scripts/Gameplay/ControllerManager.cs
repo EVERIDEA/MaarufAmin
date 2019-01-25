@@ -29,7 +29,7 @@ public class ControllerManager : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (GameplayManager.thisClass.isGameReady) {
+        if (GameplayManager.thisClass.IsGameReady) {
             if (Input.GetMouseButtonDown(0) && !isOnPlaying)
             {
                 PlayerBehaviour.thisClass.isOnGrass = false;
